@@ -362,27 +362,6 @@ function replace_pairs!(res, A, count::Int, old_new::Tuple{Vararg{Pair}})
 end
 
 """
-    replace!(pred::Function, A, new; [count::Integer])
-
-Replace all occurrences `x` in collection `A` for which `pred(x)` is true
-by `new`.
-
-# Examples
-```jldoctest
-julia> A = [1, 2, 3, 1];
-
-julia> replace!(isodd, A, 0, count=2)
-4-element Array{Int64,1}:
- 0
- 2
- 0
- 1
-```
-"""
-replace!(pred::Callable, A, new; count::Integer=typemax(Int)) =
-    replace!(x -> ifelse(pred(x), new, x), A, count=check_count(count))
-
-"""
     replace!(new::Function, A; [count::Integer])
 
 Replace each element `x` in collection `A` by `new(x)`.
