@@ -134,12 +134,12 @@ function slug(x::UInt32, p::Int)
     end
 end
 
-function package_slug(uuid::UUID, p::Int=4)
+function package_slug(uuid::UUID, p::Int=6)
     crc = _crc32c(uuid)
     return slug(crc, p)
 end
 
-function version_slug(uuid::UUID, sha1::SHA1, p::Int=4)
+function version_slug(uuid::UUID, sha1::SHA1, p::Int=6)
     crc = _crc32c(uuid)
     crc = _crc32c(sha1.bytes, crc)
     return slug(crc, p)
