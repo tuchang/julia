@@ -1207,6 +1207,8 @@ end
 
     # issue #27979 (dislaying arrays of pairs containing arrays as first member)
     @test replstr([[1.0]=>1.0]) == "1-element Array{Pair{Array{Float64,1},Float64},1}:\n [1.0] => 1.0"
+
+    @test replstr(Vector[Any[1]]) == "1-element Array{Array{T,1} where T,1}:\n Any[1]"
 end
 
 @testset "#14684: `display` should print associative types in full" begin
@@ -1315,5 +1317,5 @@ end
 
 @testset """printing "Any" is not skipped with nested arrays""" begin
     @test replstr(Union{X28004,Vector}[X28004(Any[X28004(1)])]) ==
-        "1-element Array{Union{X28004, Array{T,1} where T},1}:\n X(Any[X(1)])"
+        "1-element Array{Union{$(curmod_prefix)X28004, Array{T,1} where T},1}:\n X(Any[X(1)])"
 end
