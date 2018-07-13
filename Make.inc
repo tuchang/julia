@@ -134,6 +134,9 @@ else
 NO_GIT := 1
 endif
 
+# Setting for local precompile
+JULIA_LOCAL_PRECOMPILE ?= 1
+
 # Julia's Semantic Versioning system labels the three decimal places in a version number as
 # the major, minor and patch versions.  Typically the major version would be incremented
 # whenever a backwards-incompatible change is made, the minor version would be incremented

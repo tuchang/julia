@@ -224,4 +224,5 @@ clean:
 	-rm -f $(BUILDDIR)/file_constants.jl
 	-rm -f $(BUILDDIR)/version_git.jl
 	-rm -f $(BUILDDIR)/version_git.jl.phony
+	-rm -f $(BUILDDIR)/precompile_local.jl
 	-rm -f $(build_private_libdir)/lib*.$(SHLIB_EXT)*

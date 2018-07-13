@@ -74,13 +74,20 @@ julia-ui-release julia-ui-debug : julia-ui-% : julia-src-%
 julia-sysimg : julia-base julia-ui-$(JULIA_BUILD_MODE)
 	@$(MAKE) $(QUIET_MAKE) -C $(BUILDROOT) $(build_private_libdir)/sys.ji JULIA_EXECUTABLE='$(JULIA_EXECUTABLE)'
 
+julia-sysimg-precompile-release julia-sysimg-precompile-debug : julia-sysimg-precompile-% : julia-sysimg-%
+ifeq ($(JULIA_LOCAL_PRECOMPILE), 1)
+	@echo Generating precompile statements for the local system, disable with JULIA_LOCAL_PRECOMPILE=0 in Make.user
+	@$(JULIA_EXECUTABLE) $(JULIAHOME)/contrib/generate_precompile.jl
+	@$(MAKE) julia-sysimg-$*
+endif
+
 julia-sysimg-release : julia-sysimg julia-ui-release
 	@$(MAKE) $(QUIET_MAKE) -C $(BUILDROOT) $(build_private_libdir)/sys.$(SHLIB_EXT)
 
 julia-sysimg-debug : julia-sysimg julia-ui-debug
 	@$(MAKE) $(QUIET_MAKE) -C $(BUILDROOT) $(build_private_libdir)/sys-debug.$(SHLIB_EXT)
 
-julia-debug julia-release : julia-% : julia-ui-% julia-sysimg-% julia-symlink julia-libccalltest julia-base-cache
+julia-debug julia-release : julia-% : julia-ui-% julia-sysimg-precompile-% julia-symlink julia-libccalltest julia-base-cache
 
 debug release : % : julia-%
 
@@ -567,6 +574,7 @@ distcleanall: cleanall
 	julia-debug julia-release julia-deps \
 	julia-ui-release julia-ui-debug julia-src-release julia-src-debug \
 	julia-symlink julia-base julia-sysimg julia-sysimg-release julia-sysimg-debug \
+	julia-sysimg-precompile-release julia-sysimg-precompile-debug \
 	test testall testall1 test clean distcleanall cleanall clean-* \
 	run-julia run-julia-debug run-julia-release run \
 	install binary-dist light-source-dist.tmp light-source-dist \
