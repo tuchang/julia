@@ -1246,7 +1246,7 @@ function normalize_keys(keymap::Dict)
     return ret
 end
 
-function add_nested_key!(keymap::Dict, key, value; override = false)
+function add_nested_key!(keymap::Dict, key, value, override = false)
     y = iterate(key)
     while y !== nothing
         c, i = y
@@ -1423,7 +1423,7 @@ function keymap_merge(target,source)
     direct_keys = filter(p -> isa(p.second, Union{Function, KeyAlias, Nothing}), source)
     # first direct entries
     for key in keys(direct_keys)
-        add_nested_key!(ret, key, source[key]; override = true)
+        add_nested_key!(ret, key, source[key], true #= override =#)
     end
     # then redirected entries
     for key in setdiff(keys(source), keys(direct_keys))
@@ -1448,7 +1448,7 @@ function keymap_merge(target,source)
                 error("Could not find redirected value " * escape_string(source[key]))
             end
         end
-        add_nested_key!(ret, key, value; override = true)
+        add_nested_key!(ret, key, value, true #= override =#)
     end
     ret
 end

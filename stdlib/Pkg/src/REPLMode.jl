@@ -1029,10 +1029,12 @@ function create_mode(repl, main)
 
     mk = REPL.mode_keymap(main)
 
-    shell_mode = nothing
-    for mode in Base.active_repl.interface.modes
-        if mode isa LineEdit.Prompt
-            mode.prompt == "shell> " && (shell_mode = mode)
+    if isdefined(Base, :active_repl)
+        shell_mode = nothing
+        for mode in Base.active_repl.interface.modes
+            if mode isa LineEdit.Prompt
+                mode.prompt == "shell> " && (shell_mode = mode)
+            end
         end
     end
 

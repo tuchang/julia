@@ -88,7 +88,6 @@ precompile(Tuple{getfield(Core, Symbol("#kw#Type")), NamedTuple{(:prompt_prefix,
 precompile(Tuple{getfield(Core, Symbol("#kw#Type")), NamedTuple{(:prompt_prefix, :prompt_suffix, :repl, :complete, :on_enter), Tuple{String, typeof(Base.input_color), REPL.LineEditREPL, REPL.REPLCompletionProvider, typeof(REPL.return_callback)}}, Type{REPL.LineEdit.Prompt}, String})
 precompile(Tuple{getfield(REPL, Symbol("#@repl")), LineNumberNode, Module, Base.TTY, Symbol})
 precompile(Tuple{getfield(REPL, Symbol("#kw##printmatches")), NamedTuple{(:cols,), Tuple{Int64}}, typeof(REPL.printmatches), Base.TTY, String, Array{String, 1}})
-precompile(Tuple{getfield(REPL.LineEdit, Symbol("#kw##add_nested_key!")), NamedTuple{(:override,), Tuple{Bool}}, typeof(REPL.LineEdit.add_nested_key!), Base.Dict{Char, Any}, Char, Function})
 precompile(Tuple{getfield(REPL.LineEdit, Symbol("#kw##refresh_multi_line")), NamedTuple{(:beeping,), Tuple{Bool}}, typeof(REPL.LineEdit.refresh_multi_line), REPL.Terminals.TTYTerminal, REPL.LineEdit.PromptState})
 precompile(Tuple{typeof(Base.:(!=)), Char, Char})
 precompile(Tuple{typeof(Base.:(!=)), Int64, Int64})

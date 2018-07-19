@@ -320,6 +320,7 @@ _atreplinit(repl) = invokelatest(__atreplinit, repl)
 
 # The REPL stdlib hooks into Base using this Ref
 const REPL_MODULE_REF = Ref{Module}()
+f_repl(backend) = (global active_repl_backend = backend)
 
 # run the requested sort of evaluation loop on stdio
 function run_main_repl(interactive::Bool, quiet::Bool, banner::Bool, history_file::Bool, color_set::Bool)
@@ -361,7 +362,7 @@ function run_main_repl(interactive::Bool, quiet::Bool, banner::Bool, history_fil
             # REPLDisplay
             pushdisplay(REPL.REPLDisplay(active_repl))
             _atreplinit(active_repl)
-            REPL.run_repl(active_repl, backend->(global active_repl_backend = backend))
+            REPL.run_repl(active_repl, f_repl)
         end
     else
         # otherwise provide a simple fallback
