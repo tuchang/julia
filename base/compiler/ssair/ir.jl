@@ -55,7 +55,7 @@ struct CFG
 end
 copy(c::CFG) = CFG(copy(c.blocks), copy(c.index))
 
-function block_for_inst(index, inst)
+function block_for_inst(index::Vector{Int}, inst::Int)
     searchsortedfirst(index, inst, lt=(<=))
 end
 block_for_inst(cfg::CFG, inst) = block_for_inst(cfg.index, inst)

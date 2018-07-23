@@ -466,7 +466,7 @@ add_tfunc(<:, 2, 2,
               return Bool
           end, 0)
 
-function const_datatype_getfield_tfunc(@nospecialize(sv), @nospecialize(fld))
+function const_datatype_getfield_tfunc(@nospecialize(sv), fld::Int)
     if (fld == DATATYPE_NAME_FIELDINDEX ||
             fld == DATATYPE_PARAMETERS_FIELDINDEX ||
             fld == DATATYPE_TYPES_FIELDINDEX ||
@@ -657,7 +657,12 @@ function getfield_tfunc(@nospecialize(s00), @nospecialize(name))
             return rewrap_unionall(unwrapva(s.types[1]), s00)
         end
         # union together types of all fields
-        return tmerge_all(map(@nospecialize(t) -> rewrap_unionall(unwrapva(t), s00), s.types))
+        t = Bottom
+        for _ft in s.types
+            t = tmerge(t, rewrap_unionall(unwrapva(_ft), s00))
+            t === Any && break
+        end
+        return t
     end
     fld = name.val
     if isa(fld,Symbol)
@@ -767,7 +772,12 @@ function fieldtype_tfunc(@nospecialize(s0), @nospecialize(name))
         if !(Int <: name || Symbol <: name)
             return Bottom
         end
-        return tmerge_all(Any[ fieldtype_tfunc(s0, Const(i)) for i = 1:length(ftypes) ])
+        t = Bottom
+        for i in 1:length(ftypes)
+            t = tmerge(t, fieldtype_tfunc(s0, Const(i)))
+            t === Any && break
+        end
+        return t
     end
 
     fld = name.val
@@ -1037,7 +1047,7 @@ function _builtin_nothrow(@nospecialize(f), argtypes::Array{Any,1}, @nospecializ
     return false
 end
 
-function builtin_nothrow(@nospecialize(f), argtypes::Array{Any, 1}, rt)
+function builtin_nothrow(@nospecialize(f), argtypes::Array{Any, 1}, @nospecialize(rt))
     rt === Bottom && return false
     contains_is(_PURE_BUILTINS, f) && return true
     return _builtin_nothrow(f, argtypes, rt)
