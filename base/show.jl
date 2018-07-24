@@ -666,7 +666,7 @@ function show(io::IO, src::CodeInfo)
         IRShow.show_ir(lambda_io, ir, argnames=sourceinfo_slotnames(src))
     else
         # this is a CodeInfo that has not been used as a method yet, so its locations are still LineNumberNodes
-        body = Expr(:body)
+        body = Expr(:block)
         body.args = src.code
         show(lambda_io, body)
     end
@@ -939,7 +939,7 @@ function show_block(io::IO, head, args::Vector, body, indent::Int)
     end
 
     ind = head === :module || head === :baremodule ? indent : indent + indent_width
-    exs = (is_expr(body, :block) || is_expr(body, :body)) ? body.args : Any[body]
+    exs = is_expr(body, :block) ? body.args : Any[body]
     for ex in exs
         print(io, '\n', " "^ind)
         show_unquoted(io, ex, ind, -1)
@@ -1370,7 +1370,7 @@ function show_unquoted(io::IO, ex::Expr, indent::Int, prec::Int)
         end
         print(io, "end")
 
-    elseif head === :block || head === :body
+    elseif head === :block
         show_block(io, "begin", ex, indent); print(io, "end")
 
     elseif head === :quote && nargs == 1 && isa(args[1],Symbol)
